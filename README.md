@@ -34,7 +34,7 @@ $ ros2 launch my_robot_navigation nav_launch.py
 
 ## Multi-robot-navigation
 
-*launch the robots using
+* launch the robots using
 ```
 $ ros2 launch multi_robot_navigation gazebo_multi_nav2_world.launch.py
 ```
