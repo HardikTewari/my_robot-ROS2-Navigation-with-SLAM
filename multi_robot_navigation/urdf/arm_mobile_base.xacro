@@ -1,0 +1,99 @@
+<?xml version="1.0"?>
+<robot name="robot_arm" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+
+    <!-- <variables for the robotic arm -->
+    <xacro:property name="arm_base_length" value="0.1"/>
+    <xacro:property name="arm_base_width" value="0.1"/>
+    <xacro:property name="arm_base_height" value="0.02"/>
+    <xacro:property name="arm_length" value="0.3"/>
+
+    <!-- links for the robotic arm -->
+
+    <link name="arm_base_footprint" />
+
+    <link name="arm_base_link">
+        <visual>
+            <geometry>
+                <box size="${arm_base_length} ${arm_base_width} ${arm_base_height}"/>
+            </geometry>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <material name="orange" />
+        </visual>
+        <collision>
+            <geometry>
+                <box size="${arm_base_length} ${arm_base_width} ${arm_base_height}"/>
+            </geometry>
+            <origin xyz="0 0 0" rpy="0 0 0"/>                
+        </collision>
+        <xacro:box_inertia m="0.5" l="${arm_base_length}" w="${arm_base_width}" 
+                           h="${arm_base_height}" xyz="0 0 ${arm_base_height/2.0}" rpy="0 0 0" />
+    </link>
+
+
+    <link name="fore_arm_link" >
+        <visual>
+            <geometry>
+                <cylinder radius="${arm_base_height}" length="${arm_length}" />
+            </geometry>
+            <origin xyz=" 0 0 ${arm_length/2}" rpy="0 0 0" />
+            <material name="yellow" />
+        </visual>
+        <collision>
+            <geometry>
+                <cylinder radius="${arm_base_height}" length="${arm_length}" />
+            </geometry>
+            <origin xyz=" 0 0 ${arm_length/2}" rpy="0 0 0" />        
+        </collision>
+        <xacro:cylinder_inertia m="0.3" r="${arm_base_height}" h="${arm_length}"
+                             xyz="0 0 0" rpy="0 0 0" />
+    </link>
+
+    <link name="head_arm_link" >
+        <visual>
+            <geometry>
+                <cylinder radius="${arm_base_height}" length="${arm_length}" />
+            </geometry>
+            <origin xyz=" 0 0 ${arm_length/2}" rpy="0 0 0" />
+            <material name="orange" />
+        </visual>
+        <collision>
+            <geometry>
+                <cylinder radius="${arm_base_height}" length="${arm_length}" />
+            </geometry>
+            <origin xyz=" 0 0 ${arm_length/2}" rpy="0 0 0" />        
+        </collision>
+        <xacro:cylinder_inertia m="0.3" r="${arm_base_height}" h="${arm_length}"
+                             xyz="0 0 0" rpy="0 0 0" />
+    </link>
+
+
+    <!-- joints for the robotic arm -->
+
+    <joint name="arm_base_joint" type="fixed">
+        <parent link="arm_base_footprint"/>
+        <child link="arm_base_link" />
+        <origin xyz="0 0 ${arm_base_height/2.0}" rpy="0 0 0" />
+    </joint>
+
+    <joint name="base_forearm_joint" type="revolute">
+        <parent link="arm_base_link" />
+        <child link="fore_arm_link" />
+        <origin xyz="0 0 ${arm_base_height/2}" />
+        <axis xyz="0 1 0" />
+        <limit effort="100" velocity="100" lower="${-pi/2}" upper="0" />
+        <dynamics damping="0.1" friction="0.05"/>
+
+    </joint>
+
+    <joint name="forearm_head_joint" type="revolute">
+        <parent link="fore_arm_link" />
+        <child link="head_arm_link" />
+        <origin xyz="0 0 ${arm_length}" />
+        <axis xyz="0 1 0" />
+        <limit effort="100" velocity="100" lower="${-pi/2}" upper="0" />
+        <dynamics damping="0.1" friction="0.05"/>
+    </joint>    
+
+
+</robot>
